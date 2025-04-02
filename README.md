@@ -1,3 +1,14 @@
+# Sound Sphere App
+
+A project for managing and playing sound spheres.
+
+## Scripts
+
+- `npm start`: Start the application.
+- `npm run dev`: Start the application in development mode.
+- `npm run build`: Build the application.
+- `npm test`: Run tests.
+
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started
