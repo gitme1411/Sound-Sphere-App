@@ -1,35 +1,44 @@
 import {Dimensions, Platform} from 'react-native';
 
-const {width: DEVICE_SCREEN_WIDTH, height: DEVICE_SCREEN_HEIGHT} =
-  Dimensions.get(
-    Platform.select({ios: 'screen', android: 'window'}) ?? 'window',
-  );
+// Lấy kích thước thực tế của thiết bị
+const {width: WINDOW_WIDTH, height: WINDOW_HEIGHT} = Dimensions.get('window');
+const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('screen');
 
-const DESIGN_SCREEN_WIDTH = 1024;
-const DESIGN_SCREEN_HEIGHT = 1366;
+// Nếu trên Android, ưu tiên 'screen', còn iOS dùng 'window'
+const DEVICE_WIDTH = Platform.OS === 'android' ? SCREEN_WIDTH : WINDOW_WIDTH;
+const DEVICE_HEIGHT = Platform.OS === 'android' ? SCREEN_HEIGHT : WINDOW_HEIGHT;
 
-const widthPercent = DEVICE_SCREEN_WIDTH / DESIGN_SCREEN_WIDTH;
-const heightPercent = DEVICE_SCREEN_HEIGHT / DESIGN_SCREEN_HEIGHT;
+// Kích thước thiết kế chuẩn (Figma, Sketch, Adobe XD)
+const BASE_WIDTH = 375; // iPhone 11 Pro (chuẩn phổ biến)
+const BASE_HEIGHT = 812; // iPhone 11 Pro
 
-function getWidth(designWidth: number) {
-  const result = designWidth * widthPercent;
-  return Number(result.toFixed(1));
-}
+// Tính toán tỷ lệ scale
+const scaleWidth = DEVICE_WIDTH / BASE_WIDTH;
+const scaleHeight = DEVICE_HEIGHT / BASE_HEIGHT;
+const scale = Math.min(scaleWidth, scaleHeight);
 
-function getHeight(designHeight: number) {
-  const result = designHeight * heightPercent;
-  return Number(result.toFixed(1));
-}
+// ✅ Scale kích thước theo chiều rộng và chiều cao
+const getWidth = (size: number) => Math.ceil(size * scaleWidth);
+const getHeight = (size: number) => Math.ceil(size * scaleHeight);
 
-function getFont(designWidth: number) {
-  const result = designWidth * widthPercent;
-  return Number(result.toFixed(1));
-}
+// ✅ Scale font chữ nhưng không để quá nhỏ
+const getFontSize = (size: number) => {
+  const scaledSize = size * scale;
+  return Math.max(scaledSize, size * 0.85); // Không nhỏ hơn 85% kích thước gốc
+};
+
+// ✅ Scale borderRadius để bo góc không quá nhỏ
+const getRadius = (size: number) => Math.ceil(size * scale);
+
+// ✅ Scale độ dày viền, không để viền quá mỏng
+const getBorderWidth = (size: number) => Math.max(1, size * scale);
 
 export const responsive = {
   getWidth,
   getHeight,
-  getFont,
-  WIDTH: DEVICE_SCREEN_WIDTH,
-  HEIGHT: DEVICE_SCREEN_HEIGHT,
+  getFontSize,
+  getRadius,
+  getBorderWidth,
+  DEVICE_WIDTH,
+  DEVICE_HEIGHT,
 };
