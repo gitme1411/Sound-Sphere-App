@@ -1,20 +1,31 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json",
+  // "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
-    "types": ["jest", "node"],
+    "target": "esnext", // Hỗ trợ các tính năng mới của JS
+    "module": "esnext", // Hỗ trợ module mới
+    "lib": ["esnext"], // Thư viện hỗ trợ đầy đủ các tính năng mới
+    "jsx": "react-native", // JSX dùng cho React Native
+    "moduleResolution": "node", // Resolve kiểu Node (cần thiết)
+    "allowJs": true, // Hỗ trợ JS (nếu có dùng .js)
+    "noEmit": true, // Không tạo file .js khi build
+    "isolatedModules": true, // Đảm bảo mỗi file là module riêng biệt
+    "strict": true, // Bật tất cả kiểm tra nghiêm ngặt của TS
+    "esModuleInterop": true, // Cho phép import mặc định từ CommonJS
+    "skipLibCheck": true, // Bỏ qua kiểm tra file trong node_modules
+    "resolveJsonModule": true, // Cho phép import file .json
+    "baseUrl": "src", // ✅ Đường dẫn gốc
     "paths": {
-      "@/*": ["./src/*"]
-    },
-    "allowImportingTsExtensions": false,
-    "module": "esnext"
+      "@/*": ["*"] // ✅ Alias: @ = src
+    }
   },
-  "include": [
-    "./src/**/*",
+  "exclude": [
     "index.d.ts",
     ".eslintrc.js",
     "jest.setup.js",
     "jest.config.js",
     "babel.config.js",
-    "index.js"
+    "index.js",
+    "node_modules",
+    "metro.config.js"
   ]
 }
